@@ -1,0 +1,48 @@
+# Device Configuration File
+# Format: DEVICE_TYPE_NAME: parameter=value, parameter=value
+# Supported types: GPIO, I2C, SPI, UART
+
+# GPIO Configurations
+# pin: GPIO pin number (0-31)
+# mode: INPUT, OUTPUT, ALTERNATE
+# pull: NONE, UP, DOWN
+
+GPIO_LED_RED: pin=17, mode=OUTPUT, pull=NONE
+GPIO_LED_GREEN: pin=27, mode=OUTPUT, pull=NONE
+GPIO_BUTTON_1: pin=5, mode=INPUT, pull=UP
+GPIO_BUTTON_2: pin=6, mode=INPUT, pull=UP
+GPIO_RESET: pin=15, mode=OUTPUT, pull=NONE
+GPIO_ENABLE: pin=23, mode=OUTPUT, pull=DOWN
+
+# I2C Configurations
+# addr: I2C address (0x08-0x7F)
+# speed: Bus speed in Hz
+
+I2C_TEMP_SENSOR: addr=0x44, speed=100000
+I2C_EEPROM: addr=0x34, speed=400000
+I2C_RTC: addr=0x68, speed=100000
+I2C_ACCEL: addr=0x1D, speed=400000
+
+# SPI Configurations
+# cs: Chip Select pin number
+# clock: Clock speed in Hz
+# mode: SPI mode (0-3)
+
+SPI_FLASH: cs=8, clock=1000000, mode=0
+SPI_ADC: cs=9, clock=500000, mode=1
+SPI_DAC: cs=10, clock=2000000, mode=0
+
+# UART Configurations
+# tx: Transmit pin number
+# rx: Receive pin number
+# baud: Baud rate
+
+UART_DEBUG: tx=14, rx=15, baud=115200
+UART_GPS: tx=12, rx=13, baud=9600
+UART_MODEM: tx=1, rx=0, baud=57600
+
+# Additional peripherals
+GPIO_INT_SENSOR: pin=25, mode=INPUT, pull=UP
+GPIO_PWM_MOTOR: pin=19, mode=ALTERNATE, pull=NONE
+I2C_DISPLAY: addr=0x3C, speed=400000
+SPI_RADIO: cs=11, clock=8000000, mode=0
