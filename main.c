@@ -42,7 +42,7 @@ typedef struct {
     enum PeriphType type;
     char name[32];
     PeriphConfig config;
-    unsigned int enabled;
+    unsigned int enabled : 1;
 } Peripheral;
 
 static int parsed_peripheral_count = 0;
@@ -52,9 +52,11 @@ static int parsed_i2c_count = 0;
 static int parsed_spi_count = 0;
 static int parsed_uart_count = 0;
 static int no_of_conflicts = 0;
+static int disabled = 0;
 
 void parse_gpio_line(char buffer[], Peripheral *peripheral) {
     peripheral->type = GPIO_DEV;
+    peripheral->enabled = 1;
     unsigned int i=0;
     while(buffer[i]!=':')
     {
@@ -117,16 +119,26 @@ void parse_gpio_line(char buffer[], Peripheral *peripheral) {
                 i++;
             }
         }
+        else if(buffer[i]=='e' && buffer[i+1]=='n' && buffer[i+2]=='a' && buffer[i+3]=='b')
+        {
+            i+=8;
+            if(buffer[i]=='f')
+            {
+                peripheral->enabled = 0;
+            }
+        }
         i++;
     }
     // printf("Name: %s  ", peripheral->name);
     // printf("Pin: %d  ", peripheral->config.gpio.pin);
     // printf("Mode: %d  ", peripheral->config.gpio.mode);
-    // printf("Pull: %d\n", peripheral->config.gpio.pull);
+    // printf("Pull: %d  ", peripheral->config.gpio.pull);
+    // printf("Enabled: %d\n", peripheral->enabled);
 }
 
 void parse_i2c_line(char buffer[], Peripheral *peripheral) {
     peripheral->type = I2C_DEV;
+    peripheral->enabled = 1;
     int i=0;
     while(buffer[i]!=':')
     {
@@ -164,15 +176,25 @@ void parse_i2c_line(char buffer[], Peripheral *peripheral) {
             }
             peripheral->config.i2c.speed = num;
         }
+        else if(buffer[i]=='e' && buffer[i+1]=='n' && buffer[i+2]=='a' && buffer[i+3]=='b')
+        {
+            i+=8;
+            if(buffer[i]=='f')
+            {
+                peripheral->enabled = 0;
+            }
+        }
         i++;
     }
     // printf("Name: %s  ", peripheral->name);
     // printf("Addr: 0x%X  ", peripheral->config.i2c.addr);
-    // printf("Speed: %d\n", peripheral->config.i2c.speed);
+    // printf("Speed: %d  ", peripheral->config.i2c.speed);
+    // printf("Enabled: %d\n", peripheral->enabled);
 }
 
 void parse_spi_line(char buffer[], Peripheral *peripheral) {
     peripheral->type = SPI_DEV;
+    peripheral->enabled = 1;
     int i=0;
     while(buffer[i]!=':')
     {
@@ -212,16 +234,26 @@ void parse_spi_line(char buffer[], Peripheral *peripheral) {
             i+=5;
             peripheral->config.spi.mode = (buffer[i]-'0');
         }
+        else if(buffer[i]=='e' && buffer[i+1]=='n' && buffer[i+2]=='a' && buffer[i+3]=='b')
+        {
+            i+=8;
+            if(buffer[i]=='f')
+            {
+                peripheral->enabled = 0;
+            }
+        }
         i++;
     }
     // printf("Name: %s  ", peripheral->name);
     // printf("CS: %d  ", peripheral->config.spi.cs);
     // printf("Clock: %d  ", peripheral->config.spi.clock);
-    // printf("Mode: %d\n", peripheral->config.spi.mode);
+    // printf("Mode: %d  ", peripheral->config.spi.mode);
+    // printf("Enabled: %d\n", peripheral->enabled);
 }
 
 void parse_uart_line(char buffer[], Peripheral *peripheral) {
     peripheral->type = UART_DEV;
+    peripheral->enabled = 1;
     int i=0;
     while(buffer[i]!=':')
     {
@@ -268,12 +300,21 @@ void parse_uart_line(char buffer[], Peripheral *peripheral) {
             }
             peripheral->config.uart.baud = num;
         }
+        else if(buffer[i]=='e' && buffer[i+1]=='n' && buffer[i+2]=='a' && buffer[i+3]=='b')
+        {
+            i+=8;
+            if(buffer[i]=='f')
+            {
+                peripheral->enabled = 0;
+            }
+        }
         i++;
     }
     // printf("Name: %s  ", peripheral->name);
     // printf("tx: %d  ", peripheral->config.uart.tx);
     // printf("rx: %d  ", peripheral->config.uart.rx);
-    // printf("baud: %d\n", peripheral->config.uart.baud);
+    // printf("baud: %d  ", peripheral->config.uart.baud);
+    // printf("Enabled: %d\n", peripheral->enabled);
 }
 
 Peripheral* parse_config_file(FILE* filePtr) {
@@ -394,6 +435,11 @@ void validate_peripheral(Peripheral* peripheral) {
     for(int i=0;i<parsed_peripheral_count;i++)
     {
         Peripheral* peri = &peripheral[i];
+        if(peri->enabled == 0)
+        {
+            disabled++;
+            continue;
+        }
         if(peri->type == GPIO_DEV)
         {
             validate_gpio(peri);
@@ -417,6 +463,10 @@ void printf_gpio(FILE* filePtr, Peripheral* peripheral) {
     for(int i=0;i<parsed_peripheral_count;i++)
     {
         Peripheral* peri = &peripheral[i];
+        if(peri->enabled == 0)
+        {
+            continue;
+        }
         if(peri->type == GPIO_DEV)
         {
             char line[250];
@@ -430,6 +480,10 @@ void printf_i2c(FILE* filePtr, Peripheral* peripheral) {
     for(int i=0;i<parsed_peripheral_count;i++)
     {
         Peripheral* peri = &peripheral[i];
+        if(peri->enabled == 0)
+        {
+            continue;
+        }
         if(peri->type == I2C_DEV)
         {
             char line[250];
@@ -443,6 +497,10 @@ void printf_spi(FILE* filePtr, Peripheral* peripheral) {
     for(int i=0;i<parsed_peripheral_count;i++)
     {
         Peripheral* peri = &peripheral[i];
+        if(peri->enabled == 0)
+        {
+            continue;
+        }
         if(peri->type == SPI_DEV)
         {
             char line[250];
@@ -456,6 +514,10 @@ void printf_uart(FILE* filePtr, Peripheral* peripheral) {
     for(int i=0;i<parsed_peripheral_count;i++)
     {
         Peripheral* peri = &peripheral[i];
+        if(peri->enabled == 0)
+        {
+            continue;
+        }
         if(peri->type == UART_DEV)
         {
             char line[250];
@@ -517,6 +579,8 @@ int main()
         printf("  SPI devices: %d\n", parsed_spi_count);
         printf("  UART devices: %d\n", parsed_uart_count);
         printf("GPIO pins allocated: %d/32\n", used_gpio_pins);
+        printf("Enabled peripherals: %d\n", parsed_peripheral_count-disabled);
+        printf("Disabled peripherals: %d\n", disabled);
         unsigned char checksum = calculate_checksum(pptr);
         printf("Configuration checksum: 0x%X\n", checksum);
         printf("================================\n");

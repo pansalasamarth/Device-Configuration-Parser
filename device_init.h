@@ -1,0 +1,77 @@
+/* Auto-generated device initialization header */
+/* Generated from device configuration */
+
+#ifndef DEVICE_INIT_H
+#define DEVICE_INIT_H
+
+// GPIO: GPIO_LED_RED
+#define GPIO_LED_RED_PIN 17
+#define GPIO_LED_RED_MODE 1
+#define GPIO_LED_RED_PULL 0
+
+// GPIO: GPIO_LED_GREEN
+#define GPIO_LED_GREEN_PIN 27
+#define GPIO_LED_GREEN_MODE 1
+#define GPIO_LED_GREEN_PULL 0
+
+// GPIO: GPIO_BUTTON_2
+#define GPIO_BUTTON_2_PIN 6
+#define GPIO_BUTTON_2_MODE 0
+#define GPIO_BUTTON_2_PULL 1
+
+// GPIO: GPIO_ENABLE
+#define GPIO_ENABLE_PIN 23
+#define GPIO_ENABLE_MODE 1
+#define GPIO_ENABLE_PULL 2
+
+// GPIO: GPIO_PWM_MOTOR
+#define GPIO_PWM_MOTOR_PIN 19
+#define GPIO_PWM_MOTOR_MODE 2
+#define GPIO_PWM_MOTOR_PULL 0
+
+// I2C: I2C_TEMP_SENSOR
+#define I2C_TEMP_SENSOR_ADDR 0x44
+#define I2C_TEMP_SENSOR_SPEED 100000
+
+// I2C: I2C_RTC
+#define I2C_RTC_ADDR 0x68
+#define I2C_RTC_SPEED 10000
+
+// I2C: I2C_ACCEL
+#define I2C_ACCEL_ADDR 0x1D
+#define I2C_ACCEL_SPEED 400000
+
+// I2C: I2C_DISPLAY
+#define I2C_DISPLAY_ADDR 0x3C
+#define I2C_DISPLAY_SPEED 400000
+
+// SPI: SPI_FLASH
+#define SPI_FLASH_CS 8
+#define SPI_FLASH_CLOCK 1000000
+#define SPI_FLASH_MODE 0
+
+// SPI: SPI_ADC
+#define SPI_ADC_CS 9
+#define SPI_ADC_CLOCK 500000
+#define SPI_ADC_MODE 1
+
+// SPI: SPI_DAC
+#define SPI_DAC_CS 10
+#define SPI_DAC_CLOCK 2000000
+#define SPI_DAC_MODE 0
+
+// UART: UART_GPS
+#define UART_GPS_TX 12
+#define UART_GPS_RX 13
+#define UART_GPS_BAUD 960
+
+// UART: UART_MODEM
+#define UART_MODEM_TX 1
+#define UART_MODEM_RX 0
+#define UART_MODEM_BAUD 57600
+
+// Configuration checksum
+#define CONFIG_CHECKSUM 0xF
+
+#endif // DEVICE_INIT_H
+
