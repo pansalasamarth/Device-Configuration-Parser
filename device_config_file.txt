@@ -46,3 +46,4 @@ GPIO_INT_SENSOR: pin=25, mode=INPUT, pull=UP, enabled=false
 GPIO_PWM_MOTOR: pin=19, mode=ALTERNATE, pull=NONE, enabled=true
 I2C_DISPLAY: addr=0x3C, speed=400000
 SPI_RADIO: cs=11, clock=8000000, mode=0, enabled=false
+GPIO_LED_RED: pin=17, mode=OUTPUT, pull=NONE, enabled=true

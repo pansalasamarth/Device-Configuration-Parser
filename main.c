@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #define maxlan 256
 #define max_peripheral 50
 #define fileName "device_init.h"
@@ -434,7 +435,23 @@ void validate_peripheral(Peripheral* peripheral) {
     printf("Validating peripherals...\n");
     for(int i=0;i<parsed_peripheral_count;i++)
     {
+        int same = 0;
         Peripheral* peri = &peripheral[i];
+        for(int j=0;j<parsed_peripheral_count;j++)
+        {
+            Peripheral* peri1 = &peripheral[j];
+            if(i!=j && strcmp(peri->name, peri1->name) == 0)
+            {
+                no_of_conflicts++;
+                same = 1;
+                printf("ERROR: multiple %s\n", peri->name);
+                break;
+            }
+        }
+        if(same == 1)
+        {
+            break;
+        }
         if(peri->enabled == 0)
         {
             disabled++;
